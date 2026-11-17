@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrçamentoPopular - Planilha Inteligente (ODS)</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Biblioteca para gerar PDF -->
+    <script src="https://cloudflare.com"></script>
+    <!-- Biblioteca Chart.js para os gráficos de Torre e Pizza -->
+    <script src="https://jsdelivr.net"></script>
+</head>
+<body>
+
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <div>
+                <h1>Planilha Inteligente ODS</h1>
+                <p>Controle financeiro, projeção futura e prevenção ao endividamento</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" id="area-impressao-pdf">
+        
+        <!-- Barra de Controle de Meses e Ações -->
+        <section class="barra-meses">
+            <div class="seletor-mes-grupo">
+                <label for="filtro-mes">Acompanhar Mês:</label>
+                <input type="month" id="filtro-mes">
+            </div>
+            <div class="acoes-protegidas" data-html2canvas-ignore="true">
+                <button id="btn-gerar-pdf" class="btn-pdf">📄 Salvar em PDF</button>
+                <button id="btn-exportar-json" class="btn-secundario">📥 Baixar JSON</button>
+            </div>
+        </section>
+
+        <!-- Painel de Resumo Financeiro -->
+        <section class="resumo-cards">
+            <div class="card card-receita">
+                <h3>Entradas (<span class="label-mes-atual">Mês</span>)</h3>
+                <p id="total-receitas">R$ 0,00</p>
+            </div>
+            <div class="card card-despesa">
+                <h3>Saídas (<span class="label-mes-atual">Mês</span>)</h3>
+                <p id="total-despesas">R$ 0,00</p>
+            </div>
+            <div class="card card-saldo">
+                <h3>Saldo do Mês</h3>
+                <p id="saldo-atual">R$ 0,00</p>
+            </div>
+        </section>
+
+        <!-- Alerta Inteligente (ODS) -->
+        <section id="alerta-ods" class="alerta oculto">
+            <strong>Atenção:</strong> <span id="mensagem-alerta"></span>
+        </section>
+
+        <!-- Formulário de Lançamento -->
+        <section class="formulario-secao" data-html2canvas-ignore="true">
+            <h2>Novo Lançamento (Atual ou Futuro)</h2>
+            <form id="form-transacao">
+                <div class="campo-grupo">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" id="descricao" placeholder="Ex: Fatura Cartão, Salário, Luz" required>
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="valor">Valor (R$)</label>
+                    <input type="number" id="valor" step="0.01" min="0.01" placeholder="0,00" required>
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="categoria">Categoria</label>
+                    <select id="categoria" required>
+                        <option value="Fatura" selected>Fatura / Cartão</option>
+                        <option value="Essencial">Essencial (Água, Luz, Moradia)</option>
+                        <option value="Alimentacao">Alimentação</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Superfluo">Consumo / Lazer</option>
+                        <option value="Salario">Salário / Renda Extra</option>
+                    </select>
+                </div>
+                <div class="campo-grupo">
+                    <label for="tipo">Tipo (Automático)</label>
+                    <select id="tipo" required>
+                        <option value="saida" selected>Saída (-)</option>
+                        <option value="entrada">Entrada (+)</option>
+                    </select>
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="mes-lancamento">Mês de Referência</label>
+                    <input type="month" id="mes-lancamento" required>
+                </div>
+
+                <button type="submit" class="btn-adicionar">Registrar</button>
+            </form>
+        </section>
+
+        <!-- Tabela estilo Planilha -->
+        <section class="tabela-secao">
+            <div class="tabela-cabecalho">
+                <h2>Lançamentos de <span class="label-mes-atual">Mês</span></h2>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Mês</th>
+                        <th>Categoria</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th data-html2canvas-ignore="true">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-transacoes">
+                    <!-- Preenchido via JS -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Seção de Gráficos (Aparece na tela e sai no PDF) -->
+                <!-- Seção de Gráficos (Aparece na tela e sai no PDF) -->
+                <section class="graficos-secao">
+                    <div class="grafico-card">
+                        <h3>Gastos por Mês (Atual e Futuros)</h3>
+                        <div class="canvas-wrapper">
+                            <canvas id="grafico-torres" width="400" height="240"></canvas>
+                        </div>
+                    </div>
+        
+                    <div class="grafico-card">
+                        <h3>Distribuição de Gastos (<span class="label-mes-atual">Mês</span>)</h3>
+                        <div class="canvas-wrapper">
+                            <canvas id="grafico-pizza" width="400" height="240"></canvas>
+                        </div>
+                    </div>
+                </section>    
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
